@@ -26,6 +26,7 @@ pkglib_LTLIBRARIES = libmemcached_utilities.la \
                      ascii_scrub.la \
                      basic_engine_testsuite.la \
                      default_engine.la \
+                     cuckoo_engine.la \
                      example_protocol.la \
                      fragment_rw_ops.la \
                      blackhole_logger.la \
@@ -149,6 +150,20 @@ default_engine_la_DEPENDENCIES= libmemcached_utilities.la
 default_engine_la_LIBADD= libmemcached_utilities.la $(LIBM)
 default_engine_la_LDFLAGS= -avoid-version -shared -module -no-undefined
 
+cuckoo_engine_la_SOURCES= engines/cuckoo_engine/assoc.c \
+                          engines/cuckoo_engine/assoc.h \
+                          engines/cuckoo_engine/cuckoo_engine.c \
+                          engines/cuckoo_engine/cuckoo_engine.h \
+                          engines/cuckoo_engine/items.c \
+                          engines/cuckoo_engine/items.h \
+                          engines/cuckoo_engine/slabs.c \
+                          engines/cuckoo_engine/slabs.h
+
+cuckoo_engine_la_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/engines/cuckoo_engine
+cuckoo_engine_la_DEPENDENCIES= libmemcached_utilities.la
+cuckoo_engine_la_LIBADD= libmemcached_utilities.la $(LIBM)
+cuckoo_engine_la_LDFLAGS= -avoid-version -shared -module -no-undefined
+
 if BUILD_DTRACE
 BUILT_SOURCES += memcached_dtrace.h
 CLEANFILES += memcached_dtrace.h
@@ -159,6 +174,7 @@ memcached_LDADD += memcached_dtrace.o
 memcached_DEPENDENCIES += memcached_dtrace.o
 CLEANFILES += memcached_dtrace.o default_engine_dtrace.lo
 
+# TODO(awreece) Add dtrace for cuckoo engine?
 default_engine_la_LIBADD += default_engine_dtrace.lo
 default_engine_la_DEPENDENCIES += default_engine_dtrace.lo
 endif
