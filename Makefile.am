@@ -285,7 +285,11 @@ test_engine: engine_testapp basic_engine_testsuite.la
 	./engine_testapp -E $(ENGINE) -t $(TEST_TIMEOUT) \
 		-T .libs/basic_engine_testsuite.so
 
-test: $(bin_PROGRAMS) $(noinst_PROGRAMS) $(pkglib_LTLIBRARIES) $(ENGINE_TESTS)
+# TODO(awreece) Is this correct?
+.PHONY : engine_tests
+engine_tests: $(ENGINE_TESTS)
+
+test: $(bin_PROGRAMS) $(noinst_PROGRAMS) $(pkglib_LTLIBRARIES) engine_tests
 	./sizes
 	./testapp
 	prove $(srcdir)/t
